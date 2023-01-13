@@ -3,7 +3,7 @@ include '../config.php';
 
 use Config;
 
-class user
+class User
 {
     public static function create($data)
     {
@@ -16,6 +16,18 @@ SQL;
         return $result;
     }
 
+    public static function getAllUsers()
+    {
+        $conn = Config::connect();
+        $sql = "SELECT * FROM users";
+        $results = $conn->query($sql);
+        $results->fetch_assoc();
+       return $results;
+
+
+    }
+
+
     public static function getById($data)
     {
         $conn = Config::connect();
@@ -24,6 +36,7 @@ SQL;
         $row = $results->fetch_assoc();
         return $row;
     }
+
 
     public static function getByEmail($data)
     {
