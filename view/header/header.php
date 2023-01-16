@@ -1,5 +1,6 @@
 <?php
 session_start()
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -48,9 +49,9 @@ session_start()
                         <li class="nav-item active">
                             <a class="nav-link" aria-current="page" href="index.php">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="admindashbord.php">Admin</a>
-                        </li>
+<!--                        <li class="nav-item">-->
+<!--                            <a class="nav-link" href="admindashbord.php">Admin</a>-->
+<!--                        </li>-->
                         <li class="nav-item">
                             <a class="nav-link" href="logout.php">Logout</a>
                         </li>

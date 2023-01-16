@@ -6,9 +6,10 @@ session_start();
 use user as user;
 
 $user = user::getById($_SESSION['id']);
-echo 'hello '.'  ' .$user['name'].'  ';
+echo 'hello '.'  ' .$user['name'];
 
 include "./footer/footer.php";
+?>
 
 
 

@@ -23,6 +23,7 @@ class UserLogin
     public function loginValid()
     {
         $user = user::getUser($this->email);
+        var_dump($user);
         if ($user) {
             if ($this->checkbox) {
                 setcookie('login', $this->email, time() + 60 * 60 * 24 * 30);

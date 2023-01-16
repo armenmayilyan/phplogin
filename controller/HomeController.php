@@ -1,11 +1,12 @@
 <?php
 
 include '../model/user.php';
+
 session_start();
 
 use UserDto as userDto;
 use User as user;
-use UserLogin as userLogin;
+use UserLogin;
 
 class HomeController
 {
@@ -24,7 +25,6 @@ class HomeController
 
     public static function login($data)
     {
-
         $userLogin = new UserLogin($data);
         $loginValid = $userLogin->loginValid();
         if ($loginValid) {
