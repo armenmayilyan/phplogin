@@ -11,10 +11,10 @@ use UserLogin;
 class HomeController
 {
 
-    public static function register($data)
+    public static function create($data)
     {
         $userDto = new userDto($data);
-        $valid = $userDto->registerValid();
+        $valid = $userDto->createValid();
         if ($valid == 'success') {
             header("location: login.php");
         } else {

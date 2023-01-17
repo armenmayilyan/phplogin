@@ -1,23 +1,40 @@
 <?php
 include $_SERVER['DOCUMENT_ROOT'] . '/model/user.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/model/admin.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/controller/UserDto.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/controller/AdminController.php';
+session_start();
+if ($_SESSION == null) {
+    header("location: adminLogin.php");
+}
 
-use User as user;
-use Admin as admin;
+use User as us;
 
 $users = user::getAllUsers();
-if ($_POST['deleteUser']) {
-    user::deleteUser($_POST['hidden']);
+if ($_POST['submit']) {
+    us::deleteUser($_POST['hiddendel']);
 }
 if ($_POST['update_user']) {
     $data = [
         'name' => $_POST['name'],
         'email' => $_POST['email'],
-        'pass' => password_hash($_POST['password'], PASSWORD_BCRYPT),
+        'password' => password_hash($_POST['password'], PASSWORD_BCRYPT),
         'role' => $_POST['role'],
         'id' => $_POST['hidden']
     ];
-    $updateUser = user::updateUser($data);
+    $updateUser = new AdminController();
+    $updateUser->update($data);
+
+}
+if ($_POST['create_user']) {
+    $data = [
+        'name' => $_POST['name'],
+        'email' => $_POST['email'],
+        'password' => $_POST['password'],
+        'confirmPassword' => $_POST['confirmPassword']
+    ];
+    $createUser = new UserDto($data);
+    $createUser->createValid();
+
 }
 ?>
 <!doctype html>
@@ -45,89 +62,142 @@ if ($_POST['update_user']) {
     <title>Document</title>
 </head>
 <body>
+<div>
+
+</div>
 <div class="container mt-4 d-flex justify-content-center">
     <div>
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <!--    modal create    -->
+        <div class="modal fade" id="exampleModalc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+                        <h5 class="modal-title" id="exampleModalLabel">Create User</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <form method="post" action="admindashbord.php">
-                        <div class="modal-body">
-
-                            <input id="email" class=" email form-control mt-2"
-                                   type="email" name="email">
-                            <input id="name" class=" name form-control mt-2"
-                                   type="text" name="name">
-                            <input id="pass" class=" pass form-control mt-2"
-                                   type="password" name="password">
-                            <label for="role"> Role User</label>
-                            <select name="role" class="form-select" aria-label="Default select example">
-                                <option selected>Role Users</option>
-                                <option value="admin">Admin</option>
-                                <option value="user">User</option>
-                            </select>
-                            <input id="hidden" type="hidden" name="hidden" value="">
-                        </div>
-                        <div class="modal-footer">
-                            <input type="submit" id="updateUser" name="update_user" value="Save changes"
-                                   class=" update_user btn btn-primary">
-                            <input type="submit" name="close" value="close" class="btn btn-secondary"
-                                   data-bs-dismiss="modal">
-                        </div>
+                    <div class="modal-body">
+                        <form class="p-4" autocomplete="off" method="post">
+                            <input class="form-control mt-2"
+                                   type="email" placeholder="Email" name="email">
+                            <input class="form-control mt-2"
+                                   value=""
+                                   type="text" placeholder="name" name="name">
+                            <input class="form-control mt-2"
+                                   value=""
+                                   type="password" placeholder="password" name="password">
+                            <input class="form-control mt-2"
+                                   value=""
+                                   type="password" placeholder="Confirm Password" name="confirmPassword">
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" name="create_user" class="btn btn-primary" value="Save User">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
                     </form>
-
                 </div>
             </div>
         </div>
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModalc">Create
+            User
+        </button>
+        <!--    end modal  create  -->
+        <button type="button" class="btn btn-link"><a href="../logout.php">logout</a></button>
+        <!-- Modal del -->
+        <div class="modal fade" id="exampleModald" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Delete already sent user?
+                    </div>
+                    <form action="" autocomplete="off" method="POST">
+                        <div class="modal-footer">
+                            <input type="text">
+                            <input id="deluser" type="hidden" name="hiddendel" value="">
+                            <input type="submit" name="submit" value="Delete" class="btn btn-primary">
+                    </form>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
 
-        <table class="table">
-            <thead>
-            <tr class="border">
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Email</th>
-                <th scope="col">handler</th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php foreach ($users as $user): ?>
-                <tr>
-                    <td class="border"><?php echo $user['id'] ?></td>
-                    <td class="border"><?php echo $user['name'] ?></td>
-                    <td class="border"><?php echo $user['email'] ?></td>
-                    <td class="border d-flex justify-content-center">
+                </div>
+                </form>
 
-                        <input type="submit" onclick="getId(<?php echo $user['id'] ?>)"
-                               value="Update" data-bs-toggle="modal"
-                               data-bs-target="#exampleModal" class="btn btn-warning">
-                        <form action="" method="post">
-                            <input type='submit' class="btn btn-danger"
-                                   value="Delete" name="deleteUser">
-                            <input id="hiddendel" type="hidden" name="hidden" value="<?php echo $user['id'] ?>)">
-                        </form>
+            </div>
+        </div>
+        <!--   end modal del     -->
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form method="post" action="admindashbord.php">
+                    <div class="modal-body">
 
+                        <input id="email" class=" email form-control mt-2"
+                               type="email" name="email">
+                        <input id="name" class=" name form-control mt-2"
+                               type="text" name="name">
+                        <input id="pass" class=" pass form-control mt-2"
+                               type="password" name="password">
+                        <label for="role"> Role User</label>
+                        <select name="role" class="form-select" aria-label="Default select example">
+                            <option disabled selected>Role Users</option>
+                            <option value="user">User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <input id="hidden" type="hidden" name="hidden" value="">
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" id="updateUser" name="update_user" value="Save changes"
+                               class=" update_user btn btn-primary">
+                        <input type="submit" name="close" value="close" class="btn btn-secondary"
+                               data-bs-dismiss="modal">
+                    </div>
+                </form>
 
-                    </td>
-                </tr>
-            <?php endforeach ?>
-
-            </tbody>
-        </table>
-
+            </div>
+        </div>
     </div>
 
+    <table class="table">
+        <thead>
+        <tr class="border">
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">Email</th>
+            <th scope="col">handler</th>
+        </tr>
+        </thead>
+        <tbody>
+        <?php foreach ($users as $user): ?>
+            <tr>
+                <td class="border"><?php echo $user['id'] ?></td>
+                <td class="border"><?php echo $user['name'] ?></td>
+                <td class="border"><?php echo $user['email'] ?></td>
+                <td class="border d-flex justify-content-center">
 
+
+                    <button onclick="getId(<?php echo $user['id'] ?>)"
+                            data-bs-toggle="modal"
+                            data-bs-target="#exampleModal" class="btn btn-warning">Update
+                    </button>
+                    <button type='submit' data-bs-toggle="modal" data-bs-target="#exampleModald"
+                            onclick="getdelId(<?php echo $user['id'] ?>)" class="btn btn-danger"
+                            value="Delete">DELETE
+                    </button>
+                </td>
+            </tr>
+        <?php endforeach ?>
+        </tbody>
+    </table>
 </div>
-<?php
-if ($_SESSION['auth_admin']){
-    var_dump(12);
-} ?>
-
-
+</div>
 <script
         type="text/javascript"
         src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.1.0/mdb.min.js"

@@ -4,8 +4,7 @@ include '../controller/UserDto.php';
 include "./header/header.php";
 
 if (isset($_POST['submit'])) {
-    $user = HomeController::register($_POST);
-
+    $user = HomeController::create($_POST);
 }
 ?>
 <div class="container mt-4 d-flex justify-content-center">
@@ -13,16 +12,16 @@ if (isset($_POST['submit'])) {
         <h1>Register</h1>
         <form class="p-4" autocomplete="off" method="post">
             <input class="form-control mt-2" value=""
-                   type="email" name="email">
+                   type="email" placeholder="email" name="email">
             <input class="form-control mt-2"
                    value=""
-                   type="text" name="name">
+                   type="text"  placeholder="name" name="name">
             <input class="form-control mt-2"
                    value=""
-                   type="password" name="password">
+                   type="password" placeholder="password" name="password">
             <input class="form-control mt-2"
                    value=""
-                   type="password" name="confirmPassword">
+                   type="password" placeholder="Confirm Password" name="confirmPassword">
             <input class="btn  btn-success mt-2" type="submit" name="submit">
 
         </form>

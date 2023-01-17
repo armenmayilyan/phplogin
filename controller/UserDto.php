@@ -1,5 +1,7 @@
 <?php
+
 use User as user;
+
 class UserDto
 {
 
@@ -27,9 +29,9 @@ class UserDto
      * @return void
      */
 
-    public  function registerValid()
+    public function createValid()
     {
-        $user=User::class;
+        $user = User::class;
         try {
             if (strlen($this->name) < 2 || strlen($this->name) > 12) {
                 return $this->error = 'please write correct name!';
@@ -39,24 +41,26 @@ class UserDto
                 return $this->error = 'please write correct password or confirm password!';
             } elseif ($this->password != $this->confirmPassword) {
                 return $this->error = 'please write correct password or confirm password!';
-            }else{
+            } else {
                 $arr = [
-                    'name'=>$this->name,
-                    'email'=>$this->email,
-                    'password'=>password_hash($this->password,PASSWORD_BCRYPT)
+                    'name' => $this->name,
+                    'email' => $this->email,
+                    'password' => password_hash($this->password, PASSWORD_BCRYPT)
                 ];
                 $getEmail = $user::getByEmail($arr['email']);
                 if ($getEmail) {
                     return $this->error = 'user is register';
                 } else {
-                     $user::create($arr);
+                    $user::create($arr);
                     return "success";
                 }
 
             }
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return $e;
         }
     }
+
+
 
 }

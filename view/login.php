@@ -22,7 +22,7 @@ if ($_POST['submit']) {
                 <input class="form-control mt-2" value="<?php if (!empty($_COOKIE['login'])) echo $_COOKIE['login'] ?>"
                        type="email" name="email">
                 <input class="form-control mt-2"
-                       value="<?php if (!empty($_COOKIE['password'])) echo $_COOKIE['password'] ?>"
+                       value="<?php if (!empty($_COOKIE['password'])) echo $_COOKIE['password']?>"
                        type="password" name="password">
                 <div>
                     <input class="" type="checkbox" name="checkbox">
