@@ -9,13 +9,10 @@ trait Queriable
 {
     public static function create($data)
     {
-
         $conn = Config::connect();
         $columns = implode(',', array_map(function ($column) {
             return "`$column`";
         }, array_keys($data)));
-        var_dump($columns);
-
         $table = self::getTable();
         $sql = <<<SQL
  INSERT INTO $table ($columns)
@@ -33,20 +30,27 @@ SQL;
         $results = $conn->query($sql);
         var_dump($results);
         $row = $results->fetch_assoc();
-        var_dump($row);
         return $row;
     }
-    public static function getByEmail($data)
+    public static function getWhere($data)
     {
         $conn = Config::connect();
         $table = self::getTable();
-        $sql = "SELECT * FROM $table WHERE `email` = '{$data}'";
+        $where = '';
+        $index = 0;
+        foreach ($data as $column => $value) {
+            if ($index < 1) {
+                $where .= "WHERE `$column` = '{$value}' ";
+            } else {
+                $where .= "OR `$column` = '{$value}' ";
+            }
+            $index ++;
+        }
+        $sql = "SELECT * FROM $table $where";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
-        var_dump($row);
+        print_r($row);
         return $row['email'];
-
-
     }
 
 

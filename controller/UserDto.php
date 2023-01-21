@@ -1,62 +1,75 @@
 <?php
-use User as user;
+
+use User as model;
+
 class UserDto
 {
-
-    public $name;
-    public $email;
-    public $password;
-    public $confirmPassword;
-    public $error = '';
+    public $userDetails;
 
     /**
-     * @param $name
-     * @param $email
-     * @param $password
-     * @param $confirmPassword
+     * @param $data
      */
     public function __construct($data)
     {
-        $this->name = $data['name'];
-        $this->email = $data['email'];
-        $this->password = $data['password'];
-        $this->confirmPassword = $data['confirmPassword'];
+        $this->userDetails = $data;
     }
 
     /**
      * @return void
      */
 
-    public  function registerValid()
+    public function registerValid()
     {
-        $user=User::class;
+
+        $user = model::class;
         try {
-            if (strlen($this->name) < 2 || strlen($this->name) > 12) {
-                return $this->error = 'please write correct name!';
-            } elseif (!filter_var($this->email, FILTER_VALIDATE_EMAIL)) {
-                return $this->error = 'please write correct email!';
-            } elseif (strlen($this->password) < 6) {
-                return $this->error = 'please write correct password or confirm password!';
-            } elseif ($this->password != $this->confirmPassword) {
-                return $this->error = 'please write correct password or confirm password!';
-            }else{
+            if (strlen($this->userDetails['name']) < 2 || strlen($this->userDetails['name']) > 12) {
+                echo 'please write correct name!';
+            } elseif (!filter_var($this->userDetails['email'], FILTER_VALIDATE_EMAIL)) {
+                echo 'please write correct email!';
+            } elseif (strlen($this->userDetails['password']) < 6) {
+                echo 'please write correct password or confirm password!';
+            } elseif ($this->userDetails['password'] != $this->userDetails['confirmPassword']) {
+                echo 'please write correct password or confirm password!';
+            } else {
                 $arr = [
-                    'name'=>$this->name,
-                    'email'=>$this->email,
-                    'password'=>password_hash($this->password,PASSWORD_BCRYPT)
+                    'name' => $this->userDetails['name'],
+                    'email' => $this->userDetails['email'],
+                    'password' => password_hash($this->userDetails['password'], PASSWORD_BCRYPT)
                 ];
-                $getEmail = $user::getByEmail($arr['email']);
+
+                $getEmail = $user::getWhere(['email' => $arr['email']]);
                 if ($getEmail) {
-                    return $this->error = 'user is register';
+                    echo 'user is register';
+                    return 'user is register';
                 } else {
-                     $user::create($arr);
+                    $user::create($arr);
                     return "success";
                 }
 
             }
-        }catch (Exception $e){
+        } catch (Exception $e) {
             return $e;
         }
     }
+    public function loginValid()
+    {
+        $user = user::getUser($this->email);
+        var_dump($user,123);
+        if ($user) {
+            if ($this->checkbox) {
+                setcookie('login', $this->email, time() + 60 * 60 * 24 * 30);
+                setcookie('password', $this->pass, time() + 60 * 60 * 24 * 30);
+            } elseif ($this->email != $user['email'] && $this->pass != password_verify($this->pass, $user['password'])) {
+                return $this->error = 'please write correct login or password';
+            }
+            $_SESSION['id'] = $user['id'];
+            $_SESSION['name'] = $user['name'];
+            return true;
+
+        }
+    }
+
+
 
 }
