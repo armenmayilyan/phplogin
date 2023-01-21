@@ -1,22 +1,12 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-
-use Config;
+include '/home/arm/Desktop/phplogin/phplogin/model/traits/Queriable.php';
 
 class User
 {
-    public static function create($data)
-    {
-        $conn = Config::connect();
-        $sql = <<<SQL
- INSERT INTO users (`name`, `email`, `password`)
-VALUES ('{$data['name']}','{$data['email']}','{$data['password']}')
-SQL;
-        $result = $conn->query($sql);
-        return $result;
-    }
+    protected static $table = 'users';
+    use \traits\Queriable;
 
-    public static function getAllUsers()
+public static function getAllUsers()
     {
 
         $conn = Config::connect();
@@ -40,26 +30,17 @@ SQL;
     }
 
 
-    public static function getByEmail($data)
-    {
-
-        $conn = Config::connect();
-        $sql = "SELECT * FROM users WHERE `email` = '{$data}'";
-        $result = $conn->query($sql);
-        $row = $result->fetch_assoc();
-        return $row['email'];
 
 
-    }
-
-    public static function getUser($data)
-    {
-        $conn = Config::connect();
-        $sql = "SELECT * FROM users WHERE `email` = '$data'";
-        $results = $conn->query($sql);
-        $row = $results->fetch_assoc();
-        return $row;
-    }
+//    public static function getUser($data)
+//    {
+//        var_dump($data);
+//        $conn = Config::connect();
+//        $sql = "SELECT * FROM users WHERE `email` = '$data'";
+//        $results = $conn->query($sql);
+//        $row = $results->fetch_assoc();
+//        return $row;
+//    }
 
     public static function updateUser($data)
     {
@@ -76,21 +57,20 @@ WHERE id='{$data['id']}'";
     {
         $id = (int)$data;
         $conn = Config::connect();
-        $sql = "ALTER TABLE users
-DROP COLUMN  {$id}";
+        $sql = "DELETE FROM users WHERE `id`  = '{$id}'";
         $conn->query($sql);
 
 
     }
 
-    public static function pivote()
+    public static function roles($userId)
     {
         $conn = Config::connect();
-        $sql = "SELECT *
+        $sql = "SELECT users.*, role.role_name
 FROM users
-         LEFT JOIN role_user ru on users.id = ru.user_id
+         INNER JOIN role_user ru on users.id = {$userId}
 
-         LEFT JOIN role
+         INNER JOIN role
                     ON ru.role_id = role.id";
         $results = $conn->query($sql);
         $row = $results->fetch_assoc();

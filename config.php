@@ -1,12 +1,13 @@
 <?php
+namespace Config;
 class Config
 {
     public static function connect()
     {
         $config = [
-            'hostname' => '172.17.0.3',
-            'username' => 'root',
-            'password' => '123456',
+            'hostname' => '127.0.0.1',
+            'username' => 'arm',
+            'password' => '1111',
             'database' => 'blog',
 
         ];
@@ -14,7 +15,7 @@ class Config
 //        $database = new PDO($dsn,$config['username'],$config['password']);
 //        $database->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 //        return $database;
-        return new mysqli($config['hostname'], $config['username'], $config['password'], $config['database']);
+        return new \mysqli($config['hostname'], $config['username'], $config['password'], $config['database']);
 
     }
 }
