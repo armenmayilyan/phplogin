@@ -1,8 +1,12 @@
 <?php
-include '../controller/HomeController.php';
-include '../controller/UserLogin.php';
+namespace view;
+include "../autoload/autoload.php";
+//include '../controller/HomeController.php';
 include './header/header.php';
 
+if ($_SESSION['id']) {
+    header("location: index.php");
+}
 use HomeController as home;
 
 if ($_POST['submit']) {
@@ -22,7 +26,7 @@ if ($_POST['submit']) {
                 <input class="form-control mt-2" value="<?php if (!empty($_COOKIE['login'])) echo $_COOKIE['login'] ?>"
                        type="email" name="email">
                 <input class="form-control mt-2"
-                       value="<?php if (!empty($_COOKIE['password'])) echo $_COOKIE['password']?>"
+                       value="<?php if (!empty($_COOKIE['password'])) echo $_COOKIE['password'] ?>"
                        type="password" name="password">
                 <div>
                     <input class="" type="checkbox" name="checkbox">

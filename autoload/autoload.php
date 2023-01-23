@@ -1,9 +1,9 @@
 <?php
-spl_autoload_register(function ($class_name) {
-    include $class_name . '.php';
+namespace autoload;
+spl_autoload_register(function($className) {
+    $file = $className . '.php';
+    if (file_exists($file)) {
+        include $file;
+    }
 });
-
-$obj  = new HomeController();
-$obj2 = new AdminController();
-$obj3 = new User();
 ?>

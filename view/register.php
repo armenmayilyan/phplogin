@@ -1,9 +1,10 @@
 <?php
 include '../controller/HomeController.php';
-include '../controller/UserDto.php';
 include "./header/header.php";
-
-if (isset($_POST['submit'])) {
+if ($_SESSION['id']) {
+    header("location: index.php");
+}
+if ($_POST['submit']) {
     $user = HomeController::create($_POST);
 }
 ?>

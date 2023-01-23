@@ -1,42 +1,4 @@
-<?php
-include $_SERVER['DOCUMENT_ROOT'] . '/model/user.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/controller/UserDto.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/controller/AdminController.php';
-session_start();
-if ($_SESSION == null) {
-    header("location: adminLogin.php");
-}
 
-use User as us;
-
-$users = user::getAllUsers();
-if ($_POST['submit']) {
-    us::deleteUser($_POST['hiddendel']);
-}
-if ($_POST['update_user']) {
-    $data = [
-        'name' => $_POST['name'],
-        'email' => $_POST['email'],
-        'password' => password_hash($_POST['password'], PASSWORD_BCRYPT),
-        'role' => $_POST['role'],
-        'id' => $_POST['hidden']
-    ];
-    $updateUser = new AdminController();
-    $updateUser->update($data);
-
-}
-if ($_POST['create_user']) {
-    $data = [
-        'name' => $_POST['name'],
-        'email' => $_POST['email'],
-        'password' => $_POST['password'],
-        'confirmPassword' => $_POST['confirmPassword']
-    ];
-    $createUser = new UserDto($data);
-    $createUser->createValid();
-
-}
-?>
 <!doctype html>
 <html lang="en">
 <head>
@@ -85,10 +47,14 @@ if ($_POST['create_user']) {
                             <input class="form-control mt-2"
                                    value=""
                                    type="password" placeholder="password" name="password">
-                            <input class="form-control mt-2"
-                                   value=""
-                                   type="password" placeholder="Confirm Password" name="confirmPassword">
+
+                            <select name="role" class="form-select" aria-label="Default select example">
+                                <option disabled selected>Role Users</option>
+                                <option value="user">User</option>
+                                <option value="admin">Admin</option>
+                            </select>
                     </div>
+
                     <div class="modal-footer">
                         <input type="submit" name="create_user" class="btn btn-primary" value="Save User">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -136,7 +102,7 @@ if ($_POST['create_user']) {
                     <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <form method="post" action="admindashbord.php">
+                <form method="post" autocomplete="off" action="">
                     <div class="modal-body">
 
                         <input id="email" class=" email form-control mt-2"
@@ -181,8 +147,6 @@ if ($_POST['create_user']) {
                 <td class="border"><?php echo $user['name'] ?></td>
                 <td class="border"><?php echo $user['email'] ?></td>
                 <td class="border d-flex justify-content-center">
-
-
                     <button onclick="getId(<?php echo $user['id'] ?>)"
                             data-bs-toggle="modal"
                             data-bs-target="#exampleModal" class="btn btn-warning">Update

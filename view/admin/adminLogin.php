@@ -1,10 +1,14 @@
 <?php
-include $_SERVER['DOCUMENT_ROOT'] . '/model/user.php';
+//ini_set('display_errors', 1);
+//ini_set('display_startup_errors', 1);
+//error_reporting(E_ALL);
+include $_SERVER['DOCUMENT_ROOT'] . '/model/Admin.php';
 include $_SERVER['DOCUMENT_ROOT'] . '/controller/AdminController.php';
-$admin = AdminController::class;
-if ($_POST['submit']) {
-    $admin::adminLogin($_POST);
-}
+
+//if ($_POST['submit']) {
+//    $admin = new AdminController();
+//    $admin->adminLogin($_POST);
+//}
 ?>
 <!doctype html>
 <html lang="en">

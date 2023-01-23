@@ -1,6 +1,5 @@
 <?php
-
-use User as user;
+session_start();
 
 class UserLogin
 {
@@ -8,22 +7,24 @@ class UserLogin
     public $pass;
     public $checkbox;
     public $error = '';
+    public $user;
 
     public function __construct($data)
     {
+        $this->user = new User();
         $this->email = $data['email'];
         $this->pass = $data['password'];
-        if($data['checkbox']){
-            $this->checkbox=$data[$this->checkbox];
-        }else{
+        if ($data['checkbox'] == 'on') {
+            $this->checkbox = $data['checkbox'];
+        } else {
             $data['checkbox'] = null;
         }
     }
 
     public function loginValid()
     {
-        $user = user::getUser($this->email);
-        var_dump($user);
+
+        $user = $this->user->getUser($this->email);
         if ($user) {
             if ($this->checkbox) {
                 setcookie('login', $this->email, time() + 60 * 60 * 24 * 30);

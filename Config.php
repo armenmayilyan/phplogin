@@ -1,7 +1,7 @@
 <?php
 class Config
 {
-    public static function connect()
+    public function connect()
     {
         $config = [
             'hostname' => '172.17.0.3',
