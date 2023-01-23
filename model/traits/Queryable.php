@@ -5,7 +5,7 @@ include '/home/arm/Desktop/phplogin/phplogin/config.php';
 
 use Config\Config;
 
-trait Queriable
+trait Queryable
 {
     public static function create($data)
     {
@@ -22,16 +22,6 @@ SQL;
         return $result;
     }
 
-    public static function getUser($data)
-    {
-        $conn = Config::connect();
-        $table = self::getTable();
-        $sql = "SELECT * FROM $table WHERE `email` = `$data`";
-        $results = $conn->query($sql);
-        var_dump($results);
-        $row = $results->fetch_assoc();
-        return $row;
-    }
     public static function getWhere($data)
     {
         $conn = Config::connect();
@@ -44,13 +34,12 @@ SQL;
             } else {
                 $where .= "OR `$column` = '{$value}' ";
             }
-            $index ++;
+            $index++;
         }
         $sql = "SELECT * FROM $table $where";
         $result = $conn->query($sql);
         $row = $result->fetch_assoc();
-        print_r($row);
-        return $row['email'];
+        return $row;
     }
 
 

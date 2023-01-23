@@ -1,27 +1,10 @@
 <?php
-include '../controller/HomeController.php';
-include './header/header.php';
-include "../controller/UserDto.php";
-use HomeController as UController;
-
-if($_SESSION != null){
-    header("location index.php");
-}
-    if ($_POST['submit']) {
-        $data = [
-            'email' => $_POST['email'],
-            'password' => $_POST['password'],
-            'checkbox' => $_POST['checkbox']
-        ];
-        UController::login($data);
-}
-
+include "../header/header.php";
 
 ?>
-
     <div class="container mt-4 d-flex justify-content-center">
         <div class="w-50 text-center mt-4 ">
-            <h1>Login</h1>
+            <h1>Admin Login</h1>
             <form class="p-4" autocomplete="off" method="post">
                 <input class="form-control mt-2" value="<?php if (!empty($_COOKIE['login'])) echo $_COOKIE['login'] ?>"
                        type="email" name="email">
@@ -38,5 +21,5 @@ if($_SESSION != null){
 
     </div>
 <?php
-include "./footer/footer.php";
+include "../footer/footer.php";
 ?>

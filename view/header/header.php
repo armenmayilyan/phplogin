@@ -1,4 +1,6 @@
 <?php
+require('../autoload/autoload.php');
+spl_autoload_register('autoload');
 session_start()
 
 ?>

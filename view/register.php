@@ -3,10 +3,10 @@ include '../controller/HomeController.php';
 include '../controller/UserDto.php';
 include "./header/header.php";
 
-if (isset($_POST['submit'])) {
-    $user = HomeController::register($_POST);
-
+    if (isset($_POST['submit'])) {
+        $user = HomeController::register($_POST);
 }
+
 ?>
 <div class="container mt-4 d-flex justify-content-center">
     <div class="w-50 text-center mt-4 ">

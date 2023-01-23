@@ -8,6 +8,6 @@
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
 <script type='text/javascript' src='/public/script.js'></script>
-></script>
+</script>
 </body>
 </html>
