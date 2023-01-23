@@ -1,54 +1,34 @@
 <?php
-namespace controller;
+session_start();
 include $_SERVER['DOCUMENT_ROOT'] . '/model/User.php';
-include $_SERVER['DOCUMENT_ROOT'] . '/controller/UserLogin.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/controller/UserDto.php';
+
+use UserDto as userDto;
+
 class HomeController
 {
+    public static $error = '';
 
     public static function create($data)
     {
-        $user = new User();
-        try {
-            if (strlen($data['name']) < 2 || strlen($data['name']) > 12) {
-                echo 'please write correct name!';
-            } elseif (!filter_var($data['email'], FILTER_VALIDATE_EMAIL)) {
-                echo 'please write correct email!';
-            } elseif (strlen($data['password']) < 6) {
-                echo 'please write correct password or confirm password!';
-            } elseif ($data['password'] != $data['confirmPassword']) {
-                echo 'please write correct password or confirm password!';
-            } else {
-                $arr = [
-                    'name' => $data['name'],
-                    'email' => $data['email'],
-                    'password' => password_hash($data['password'], PASSWORD_BCRYPT)
-                ];
 
-                $emailCheck = $user->getByEmail($arr['email']);
-
-                if ($emailCheck != null) {
-                    echo 'User in register';
-                } else {
-                    $user->create($arr);
-                    header("location: login.php");
-                }
-
-            }
-        } catch (Exception $e) {
-            return $e;
+        $userDto = new userDto($data);
+        $valid = $userDto->registerValid();
+        if ($valid == 'success') {
+            header("location: login.php");
+        } else {
+            self::$error = $userDto->errors;
         }
-
-
     }
 
     public static function login($data)
     {
-
-        $userLogin = new UserLogin($data);
+        $userLogin = new userDto($data);
         $loginValid = $userLogin->loginValid();
-        if ($loginValid) {
+        if ($loginValid['id']) {
             header("location: index.php");
         }
+            self::$error = $userLogin->errors;
 
     }
 

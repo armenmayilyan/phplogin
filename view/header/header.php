@@ -1,4 +1,5 @@
 <?php
+namespace view;
 session_start()
 ?>
 <!doctype html>
@@ -44,7 +45,7 @@ session_start()
             </button>
             <div class="collapse navbar-collapse" id="navbarExample01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <?php if (isset($_SESSION['name'])): ?>
+                    <?php if (($_SESSION['id'] != null)): ?>
                         <li class="nav-item active">
                             <a class="nav-link" aria-current="page" href="index.php">Home</a>
                         </li>

@@ -1,7 +1,8 @@
 <?php
+namespace Config;
 class Config
 {
-    public function connect()
+    public static function connect()
     {
         $config = [
             'hostname' => '172.17.0.3',
@@ -14,7 +15,7 @@ class Config
 //        $database = new PDO($dsn,$config['username'],$config['password']);
 //        $database->setAttribute(PDO::ATTR_ERRMODE,PDO::ERRMODE_EXCEPTION);
 //        return $database;
-        return new mysqli($config['hostname'], $config['username'], $config['password'], $config['database']);
+        return new \mysqli($config['hostname'], $config['username'], $config['password'], $config['database']);
 
     }
 }
