@@ -1,15 +1,15 @@
 <?php
-
-include '../model/user.php';
-
 session_start();
+include $_SERVER['DOCUMENT_ROOT'] . '/model/User.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/controller/UserDto.php';
 
-use UserDto as userDto;
+use Config\controller\UserDto as userDto;
 
 class HomeController
 {
+    public static $error;
 
-    public static function register($data)
+    public static function create($data)
     {
 
         $userDto = new userDto($data);
@@ -17,19 +17,19 @@ class HomeController
         if ($valid == 'success') {
             header("location: login.php");
         } else {
-            return $valid;
+            self::$error = $userDto->errors;
         }
-
     }
 
     public static function login($data)
     {
-        $userLogin = new UserDto($data);
+        $userLogin = new userDto($data);
         $loginValid = $userLogin->loginValid();
-        if ($loginValid) {
+        if (!is_null($loginValid)) {
             header("location: index.php");
         }
-
+            var_dump(self::$error = $userLogin->errors);
 
     }
+
 }

@@ -5,9 +5,9 @@ class Config
     public static function connect()
     {
         $config = [
-            'hostname' => '127.0.0.1',
-            'username' => 'arm',
-            'password' => '1111',
+            'hostname' => '172.17.0.3',
+            'username' => 'root',
+            'password' => '123456',
             'database' => 'blog',
 
         ];

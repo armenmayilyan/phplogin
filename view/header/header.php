@@ -1,6 +1,6 @@
 <?php
+namespace view;
 session_start()
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,7 +25,7 @@ session_start()
             rel="stylesheet"
     />
 
-    <title>Document</title>
+    <title></title>
 </head>
 <body>
 <header>
@@ -45,13 +45,18 @@ session_start()
             </button>
             <div class="collapse navbar-collapse" id="navbarExample01">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <?php if (isset($_SESSION['name'])): ?>
+                    <?php if (($_SESSION['admin'] != null)): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="adminDashbord.php">Admin</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../logout.php">Logout</a>
+                        </li>
+                    <?php elseif (($_SESSION['id'] != null)): ?>
                         <li class="nav-item active">
                             <a class="nav-link" aria-current="page" href="index.php">Home</a>
                         </li>
-<!--                        <li class="nav-item">-->
-<!--                            <a class="nav-link" href="admindashbord.php">Admin</a>-->
-<!--                        </li>-->
+
                         <li class="nav-item">
                             <a class="nav-link" href="logout.php">Logout</a>
                         </li>

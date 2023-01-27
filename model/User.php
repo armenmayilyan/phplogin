@@ -1,5 +1,5 @@
 <?php
-include '/home/arm/Desktop/phplogin/phplogin/model/traits/Queriable.php';
+include include $_SERVER['DOCUMENT_ROOT'] . '/model/traits/Queriable.php';
 
 class User
 {
@@ -28,9 +28,6 @@ class User
 //        $row = $results->fetch_assoc();
 //        return $row;
 //    }
-
-
-
 
 //    public static function getUser($data)
 //    {
