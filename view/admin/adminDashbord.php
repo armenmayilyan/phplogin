@@ -8,6 +8,11 @@ $users = $admin->getUser();
 if ($_POST['createUser']) {
     $admin->createUser($_POST);
 }
+if ($_POST['Update']) {
+
+    $admin->update($_POST);
+}
+
 
 ?>
     <!-- Modal Create -->
@@ -15,7 +20,7 @@ if ($_POST['createUser']) {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Create User</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -28,11 +33,6 @@ if ($_POST['createUser']) {
                         <input class="form-control mt-2"
                                value=""
                                type="password" placeholder="password" name="password">
-                        <select name="role" class="form-select" aria-label="Default select example">
-                            <option  disabled selected>User Role</option>
-                            <option  value="admin">Admin</option>
-                            <option value="user">User</option>
-                        </select>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -43,6 +43,37 @@ if ($_POST['createUser']) {
         </div>
     </div>
     <!--end Modal Create-->
+    <div class="modal fade" id="exampleModalUp" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Update User</h5>
+                </div>
+                <div class="modal-body">
+                    <form class="p-4 border rounded " autocomplete="off" method="post">
+                        <input class="form-control mt-2" value=""
+                               type="email" placeholder="email" name="email">
+                        <input class="form-control mt-2"
+                               value=""
+                               type="text" placeholder="name" name="name">
+                        <input class="form-control mt-2"
+                               value=""
+                               type="password" placeholder="password" name="password">
+                        <select name="role" class="form-select mt-2" aria-label="Default select example">
+                            <option selected>User</option>
+                            <option value="admin">Admin</option>
+                        </select>
+                        <input type="hidden" id="hidden" name="id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <input type="submit" name="Update" class="btn btn-primary" value="Save changes">
+                </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--end Modal Update-->
     <div class="container mt-3">
         <button data-bs-toggle="modal" data-bs-target="#exampleModal" class="btn btn-success ">Create</button>
         <table class="table ">
@@ -58,9 +89,10 @@ if ($_POST['createUser']) {
                 <th scope="row"><?php echo $user['id'] ?></th>
                 <td><?php echo $user['name'] ?></td>
                 <td><?php echo $user['email'] ?></td>
-                <td>
-                    <button class="btn btn-warning">Update</button>
-                    <button class="btn btn-danger">Delete</button>
+                <td class="d-flex">
+                    <button onclick="getId(<?php echo $user['id'] ?>)" data-bs-toggle="modal"
+                            data-bs-target="#exampleModalUp" class="btn btn-warning">Update
+                    </button>
                 </td>
                 </tr>
             <?php endforeach; ?>

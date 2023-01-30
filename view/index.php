@@ -3,6 +3,7 @@ namespace view;
 require "./header/header.php";
 include '../controller/HomeController.php';
 session_start();
+$_SESSION['page'] = 'Home';
 use user as user;
 $user = user::getWhere(['id'=>$_SESSION['id']]);
 ?>
@@ -13,8 +14,9 @@ endif
 ?>
 
 <?php
+
 include "./footer/footer.php";
-?>
+
 
 
 

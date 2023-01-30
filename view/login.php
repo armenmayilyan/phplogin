@@ -1,9 +1,13 @@
 <?php
 namespace view;
+echo "<pre>";
 include '../controller/HomeController.php';
 include './header/header.php';
 use HomeController as home;
-
+if($_SESSION['page'] != 'Login'){
+    header("Refresh:0");
+    $_SESSION['page'] = 'Login';
+}
 if ($_POST['submit']) {
     $data = [
         'email' => $_POST['email'],
@@ -11,9 +15,11 @@ if ($_POST['submit']) {
         'checkbox' => $_POST['checkbox']
     ];
     home::login($data);
-}
-?>
 
+}
+
+
+?>
     <div class="container mt-4 d-flex justify-content-center">
         <div class="w-50 text-center mt-4 ">
             <h1>Login</h1>

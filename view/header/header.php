@@ -1,6 +1,6 @@
 <?php
-namespace view;
-session_start()
+session_start();
+$page = $_SESSION['page'];
 ?>
 <!doctype html>
 <html lang="en">
@@ -25,7 +25,7 @@ session_start()
             rel="stylesheet"
     />
 
-    <title></title>
+    <title><?php echo $page ?></title>
 </head>
 <body>
 <header>
@@ -56,18 +56,24 @@ session_start()
                         <li class="nav-item active">
                             <a class="nav-link" aria-current="page" href="index.php">Home</a>
                         </li>
-
                         <li class="nav-item">
-                            <a class="nav-link" href="logout.php">Logout</a>
+                            <a class="nav-link" href="  logout.php">Logout</a>
+                        </li>
+                    <?php elseif($page == 'Admin Login'): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../login.php">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="../register.php">Register</a>
                         </li>
                     <?php else: ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="login.php">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="register.php">Register</a>
-                        </li>
-                    <?php endif ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="login.php">Login</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="register.php">Register</a>
+                    </li>
+                    <?php endif; ?>
 
                 </ul>
             </div>

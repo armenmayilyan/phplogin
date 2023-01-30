@@ -1,6 +1,9 @@
 <?php
+
 namespace Config\controller;
+
 use User as model;
+
 class UserDto
 {
     public $userDetails;
@@ -20,28 +23,29 @@ class UserDto
 
     public function registerValid()
     {
-//        strlen($this->userDetails['name']) < 2 || strlen($this->userDetails['name']) > 12
         $model = model::class;
         try {
             if (!filter_var($this->userDetails['email'], FILTER_VALIDATE_EMAIL)) {
                 $this->errors['email'] = 'please write correct email!';
             } elseif (strlen($this->userDetails['name']) < 2 || strlen($this->userDetails['name']) > 12) {
                 $this->errors['name'] = 'please write correct name!';
-            } elseif (strlen($this->userDetails['password']) < 6) {
+            } elseif (strlen($this->userDetails['password']) < 2) {
                 $this->errors['password'] = 'please write correct password or confirm password!';
             } elseif ($this->userDetails['password'] != $this->userDetails['confirmPassword']) {
                 $this->errors['password'] = 'please write correct password or confirm password!';
             } elseif (!is_null($this->errors)) {
-                var_dump($this->errors);
+                return $this->errors;
+
             } else {
                 $arr = [
                     'name' => $this->userDetails['name'],
                     'email' => $this->userDetails['email'],
                     'password' => password_hash($this->userDetails['password'], PASSWORD_BCRYPT)
                 ];
-                $getEmail = $model::getWhere(['email' => $arr['email']]);
-                if (!is_null($getEmail)) {
-                    return $this->errors['email'] = 'this' . $arr['email'] . ' user in register';
+                $getEmail = $model::getWhere(['email'=>$arr['email']]);
+
+                if ($getEmail['email']) {
+                   $this->errors['email'] = 'this' . $arr['email'] . ' user in register';
                 } else {
                     $model::create($arr);
                     return "success";

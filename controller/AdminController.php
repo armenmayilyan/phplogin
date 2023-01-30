@@ -1,37 +1,42 @@
 <?php
 session_start();
-include $_SERVER['DOCUMENT_ROOT'] . '/model/admin.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/model/User.php';
 
-use admin as model;
+use User as model;
+
 class AdminController
 {
-    public function loginAdmin($data)
+    public static $error;
+
+    public static function loginAdmin($data)
     {
-        $adminUser = model::getWhere(['email' => $data['email']]);
+        $model = User::class;
+        $adminUser = $model::getWhere(['email' => $data['email']]);
         if (!is_null($adminUser)) {
-            $checkAdmin = model::roles();
-            var_dump($checkAdmin);
+            $checkAdmin = model::getRoles($adminUser['id']);
             if ($checkAdmin['email'] == $data['email'] && $data['password'] == password_verify($data['password'], $checkAdmin['password']) && $checkAdmin['role_name'] == 'admin') {
                 $_SESSION['admin'] = $checkAdmin['role_name'];
+                $_SESSION['page'] = 'Admin Dashboard';
                 $_SESSION['id'] = $checkAdmin['id'];
                 $_SESSION['name'] = $checkAdmin['name'];
                 header("location: adminDashbord.php");
             } else {
-                echo 'err';
+                return self::$error = 'your are not admin !';
             }
         }
     }
 
-    public function createUser($data){
-      $checkUser = model::getWhere(['email'=>$data['email']]);
-      if(is_null($checkUser)){
-          $create = model::create($data);
-          if($create == 'success'){
-              if($data['role']=='admin'){
-                  var_dump(123);
-              }
-          }
-      }
+    public function createUser($data)
+    {
+        $checkUser = model::getWhere(['email' => $data['email']]);
+        if (is_null($checkUser)) {
+            $arr = [
+                'name' => $data['name'],
+                'email' => $data['email'],
+                'password' => password_hash($data['password'], PASSWORD_BCRYPT)
+            ];
+            model::create($arr);
+        }
     }
 
     public function getUser()
@@ -41,5 +46,15 @@ class AdminController
             return $users;
         }
 
+    }
+
+    public function update($data)
+    {
+        $id = (int)$data['id'];
+        $checkUser = model::getWhere(['email' => $data['email']]);
+        if (!is_null($checkUser)) {
+            $update = model::update($data);
+            var_dump($update);
+        }
     }
 }

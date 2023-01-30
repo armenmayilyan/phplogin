@@ -1,7 +1,13 @@
 <?php
+session_start();
 include '../controller/HomeController.php';
 include "./autoload/autoload.php";
 include "./header/header.php";
+if($_SESSION['page'] != 'Register'){
+    header("Refresh:0");
+    $_SESSION['page'] = 'Register';
+}
+var_dump($_SESSION['page']);
 if ($_SESSION['id']) {
     header("location: index.php");
 }
@@ -9,6 +15,7 @@ if ($_POST['submit']) {
     HomeController::create($_POST);
 }
 ?>
+<?php echo HomeController::$error['email']?>
     <div class="container mt-4 d-flex justify-content-center">
         <div class="w-50 text-center mt-4 ">
             <h1>Register</h1>
@@ -34,7 +41,6 @@ if ($_POST['submit']) {
                     <p class="alert alert-danger"><?php echo HomeController::$error['password'] ?> </p>
                 <?php endif; ?>
                 <input class="btn  btn-success mt-2" type="submit" name="submit">
-
             </form>
         </div>
 

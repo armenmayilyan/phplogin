@@ -1,10 +1,10 @@
 <?php
-include include $_SERVER['DOCUMENT_ROOT'] . '/model/traits/Queriable.php';
+include include $_SERVER['DOCUMENT_ROOT'] . '/model/traits/Queryable.php';
 
 class User
 {
     protected static $table = 'users';
-    use \traits\Queriable;
+    use \traits\Queryable;
 }
 //public static function getAllUsers()
 //    {

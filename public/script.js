@@ -3,7 +3,7 @@ function getId(id) {
     console.log(test)
 }
 
-function getdelId(id) {
+function getDelId(id) {
     let test = document.getElementById("deluser").value = id
     console.log(test)
 }
