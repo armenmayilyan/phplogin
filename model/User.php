@@ -1,5 +1,5 @@
 <?php
-include include $_SERVER['DOCUMENT_ROOT'] . '/model/traits/Queryable.php';
+include $_SERVER['DOCUMENT_ROOT'] . '/model/traits/Queryable.php';
 
 class User
 {

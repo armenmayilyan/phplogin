@@ -7,7 +7,7 @@ if ($_SESSION['page'] != 'Admin Login') {
     header("Refresh:0");
     $_SESSION['page'] = 'Admin Login';
 }
-if ($_POST['submit']) {
+if (isset($_POST['submit'])) {
     $admin::loginAdmin($_POST);
 }
 
@@ -24,9 +24,6 @@ if ($_POST['submit']) {
                 <input class="form-control mt-2"
                        value=""
                        type="password" name="password">
-                <div>
-                    <input class="" type="checkbox" name="checkbox">
-                </div>
                 <input class="btn  btn-success mt-2" type="submit" name="submit">
             </form>
         </div>

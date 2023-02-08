@@ -1,30 +1,32 @@
 <?php
-namespace view;
-echo "<pre>";
 include '../controller/HomeController.php';
 include './header/header.php';
-use HomeController as home;
-if($_SESSION['page'] != 'Login'){
+
+use HomeController as login;
+
+if ($_SESSION['page'] != 'Login') {
     header("Refresh:0");
     $_SESSION['page'] = 'Login';
 }
-if ($_POST['submit']) {
+if (isset($_POST['submit'])) {
+    if ($_POST['checkbox']) {
+        $remembermy = 'on';
+    } else {
+        $remembermy = null;
+    }
     $data = [
         'email' => $_POST['email'],
         'password' => $_POST['password'],
-        'checkbox' => $_POST['checkbox']
+        'checkbox' => $remembermy
     ];
-    home::login($data);
-
+    login::login($data);
 }
-
-
 ?>
     <div class="container mt-4 d-flex justify-content-center">
         <div class="w-50 text-center mt-4 ">
             <h1>Login</h1>
-            <?php if (!is_null(home::$error)): ?>
-                <p class="text-danger"><?php echo home::$error ?></p>
+            <?php if (!is_null(login::$error)): ?>
+                <p class="text-danger"><?php echo login::$error ?></p>
             <?php endif; ?>
             <form class="p-4 border rounded " autocomplete="off" method="post">
                 <input class="form-control mt-2" value="<?php if (!empty($_COOKIE['login'])) echo $_COOKIE['login'] ?>"
@@ -42,6 +44,6 @@ if ($_POST['submit']) {
             </form>
         </div>
     </div>
-    <?php
+<?php
 include "./footer/footer.php";
 ?>
