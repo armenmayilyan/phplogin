@@ -5,7 +5,7 @@ use User as model;
 class UserDto
 {
     public $userDetails;
-    public $errors;
+    public $errors = [];
 
     /**
      * @param $data
@@ -23,28 +23,32 @@ class UserDto
     {
         $model = model::class;
         try {
-            if (strlen($this->userDetails['name']) < 2 || strlen($this->userDetails['name']) > 12) {
-                 $this->errors =  'please write correct name!';
-            } elseif (!filter_var($this->userDetails['email'], FILTER_VALIDATE_EMAIL)) {
-                 $this->errors =  'please write correct email!';
-            } elseif (strlen($this->userDetails['password']) < 6) {
-                 $this->errors =  'please write correct password or confirm password!';
+            if (!filter_var($this->userDetails['email'], FILTER_VALIDATE_EMAIL)) {
+                 $this->errors['email'] = 'please write correct email!';
+            } elseif (strlen($this->userDetails['name']) < 2 || strlen($this->userDetails['name']) > 12) {
+                 $this->errors['name'] = 'please write correct name!';
+            } elseif (strlen($this->userDetails['password']) < 2) {
+                 $this->errors['password'] = 'please write correct password or confirm password!';
             } elseif ($this->userDetails['password'] != $this->userDetails['confirmPassword']) {
-                 $this->errors =  'please write correct password or confirm password!';
+                $this->errors['password'] = 'please write correct password or confirm password!';
             } else {
                 $arr = [
                     'name' => $this->userDetails['name'],
                     'email' => $this->userDetails['email'],
                     'password' => password_hash($this->userDetails['password'], PASSWORD_BCRYPT)
                 ];
-                $getEmail = $model::getWhere(['email' => $arr['email']]);
-                if ($getEmail) {
-                  $this->errors = 'user in register';
+                $getEmail = $model::getWhere(['table' => 'users'], ['email' => $arr['email']]);
+                if (!is_null($getEmail['email'])) {
+                    $this->errors['email'] = 'this' . $arr['email'] . ' user in register';
                 } else {
-                    $model::create($arr);
-                    return "success";
-                }
+                  $createdAt =  $model::create(['table' => 'users'], $arr);
+                  if($createdAt){
+                      return "success";
+                  }else{
+                      return $this->errors;
+                  }
 
+                }
             }
         } catch (Exception $e) {
             return $e;
@@ -53,7 +57,8 @@ class UserDto
 
     public function loginValid()
     {
-        $user = model::getWhere(['email' => $this->userDetails['email']]);
+        var_dump($this->userDetails);
+        $user = model::getWhere(['table' => 'users'], ["email" => $this->userDetails['email']]);
         if ($user) {
             if ($this->userDetails['checkbox'] != null) {
                 setcookie('login', $this->userDetails['email'], time() + 60 * 60 * 24 * 30);
@@ -64,7 +69,7 @@ class UserDto
             $_SESSION['id'] = $user['id'];
             $_SESSION['name'] = $user['name'];
             return $user;
-        }else{
+        } else {
             $this->errors = 'please write correct login or password';
         }
     }

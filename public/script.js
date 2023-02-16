@@ -1,9 +1,9 @@
+
 function getId(id) {
-    let test = document.getElementById('hidden').value = id
-    console.log(test)
+    console.log(window)
+    document.getElementById('delhidden').value = id
+
+    document.getElementById('hidden').value = id
 }
 
-function getdelId(id) {
-    let test = document.getElementById("deluser").value = id
-    console.log(test)
-}
+
